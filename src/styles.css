@@ -6,12 +6,10 @@
 html,
 body {
   background-color: #101010;
-
   font-family: "Onest", serif;
   font-optical-sizing: auto;
   font-size: 15px;
   color: #ffffff;
-
   display: flex;
   justify-content: center;
 }
@@ -21,34 +19,29 @@ h1 {
   margin: 20px;
 }
 
-.search-engine {
+.search-container {
   display: flex;
   gap: 10px;
   justify-content: center;
   flex-wrap: wrap;
   align-items: center;
-
   padding: 0 20px;
 }
 
-button {
+.search-button {
   font-family: "Onest", serif;
   font-weight: 600;
   font-size: 15px;
   color: #ffffff;
-
   flex-grow: 1;
-
   padding: 20px 40px;
-
   background-color: #4c47eb;
   border: none;
   border-radius: 20px;
-
   cursor: pointer;
 }
 
-.city-input {
+.city-input-wrapper {
   background-color: #161616;
   display: flex;
   border: none;
@@ -59,7 +52,7 @@ button {
   position: relative;
 }
 
-.city-input input {
+.city-input-wrapper input {
   font-family: "Onest", serif;
   font-weight: 600;
   font-size: 15px;
@@ -72,7 +65,7 @@ button {
   width: 100%;
 }
 
-.city-input input:focus {
+.city-input-wrapper input:focus {
   outline: 1px solid #4c47eb;
 }
 
@@ -80,11 +73,11 @@ button {
   margin-top: 14vh;
 }
 
-#weatherDisplay {
+.weather-info {
   margin-top: 200px;
 }
 
-#suggestionsBox {
+.suggestions-list {
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -100,11 +93,11 @@ button {
   margin-top: 10px;
 }
 
-#suggestionsBox li {
+.suggestions-list li {
   padding: 20px 40px;
   cursor: pointer;
 }
 
-#suggestionsBox li:hover {
+.suggestions-list li:hover {
   color: #4c47eb;
 }

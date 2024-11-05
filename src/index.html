@@ -10,14 +10,14 @@
   <body>
     <div class="main-page">
       <h1>Узнать фракто-погоду</h1>
-      <div class="search-engine">
-        <div class="city-input">
+      <div class="search-container">
+        <div class="city-input-wrapper">
           <input id="cityInput" autocomplete="off" placeholder="Мой город..." />
-          <ul id="suggestionsBox"></ul>
+          <ul id="suggestionsBox" class="suggestions-list"></ul>
         </div>
-        <button id="weatherButton">Узнать прогноз</button>
+        <button id="weatherButton" class="search-button">Узнать прогноз</button>
       </div>
-      <div id="weatherDisplay"></div>
+      <div id="weatherDisplay" class="weather-info"></div>
     </div>
 
     <script src="./weather-script.js"></script>
