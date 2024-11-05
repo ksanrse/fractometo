@@ -18,12 +18,17 @@ body {
 
 h1 {
   font-size: 48px;
+  margin: 20px;
 }
 
 .search-engine {
   display: flex;
-  gap: 20px;
+  gap: 10px;
   justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+
+  padding: 0 20px;
 }
 
 button {
@@ -32,27 +37,74 @@ button {
   font-size: 15px;
   color: #ffffff;
 
+  flex-grow: 1;
+
   padding: 20px 40px;
 
   background-color: #4c47eb;
   border: none;
-  border-radius: 10px;
+  border-radius: 20px;
 
   cursor: pointer;
+}
+
+.city-input {
+  background-color: #161616;
+  display: flex;
+  border: none;
+  outline: none;
+  flex-grow: 1;
+  border-radius: 20px;
+  min-width: 240px;
+  position: relative;
 }
 
 .city-input input {
   font-family: "Onest", serif;
   font-weight: 600;
   font-size: 15px;
-  color: #ffffff;
-
-  padding: 20px 40px;
   background-color: #161616;
+  color: #ffffff;
+  padding: 20px 40px;
   border: none;
-  border-radius: 10px;
+  outline: none;
+  border-radius: 20px;
+  width: 100%;
+}
+
+.city-input input:focus {
+  outline: 1px solid #4c47eb;
 }
 
 .main-page {
-  margin-top: 10%;
+  margin-top: 14vh;
+}
+
+#weatherDisplay {
+  margin-top: 200px;
+}
+
+#suggestionsBox {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: hidden;
+  background-color: #161616;
+  position: absolute;
+  z-index: 10;
+  border-radius: 20px;
+  display: none;
+  width: 100%;
+  top: 100%;
+  margin-top: 10px;
+}
+
+#suggestionsBox li {
+  padding: 20px 40px;
+  cursor: pointer;
+}
+
+#suggestionsBox li:hover {
+  color: #4c47eb;
 }

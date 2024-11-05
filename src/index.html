@@ -12,59 +12,14 @@
       <h1>Узнать фракто-погоду</h1>
       <div class="search-engine">
         <div class="city-input">
-          <input id="cityInput" placeholder="Мой город..." />
+          <input id="cityInput" autocomplete="off" placeholder="Мой город..." />
+          <ul id="suggestionsBox"></ul>
         </div>
         <button id="weatherButton">Узнать прогноз</button>
-        <div id="weatherDisplay"></div>
       </div>
+      <div id="weatherDisplay"></div>
     </div>
 
-    <script>
-      const apiKey = "6c4e0912b8154924f395d5afbcf59fb5";
-      const weatherButton = document.getElementById("weatherButton");
-      const cityInput = document.getElementById("cityInput");
-      const weatherDisplay = document.getElementById("weatherDisplay");
-
-      weatherButton.addEventListener("click", getWeather);
-
-      async function getWeather() {
-        const cityName = cityInput.value.trim();
-        if (cityName === "") {
-          alert("Please enter a city name");
-          return;
-        }
-
-        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
-          cityName
-        )}&appid=${apiKey}&units=metric`;
-        try {
-          const response = await fetch(apiUrl);
-          console.log("Response:", response);
-          if (response.ok) {
-            const data = await response.json();
-            console.log("Data:", data);
-            displayWeather(data);
-          } else {
-            throw new Error(`Error ${response.status}: ${response.statusText}`);
-          }
-        } catch (error) {
-          console.error("Error:", error);
-          weatherDisplay.innerText = `Error: ${error.message}`;
-        }
-      }
-
-      function displayWeather(weatherData) {
-        const temperature = weatherData.main.temp;
-        const description = weatherData.weather[0].description;
-        const iconUrl = `https://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`;
-
-        weatherDisplay.innerHTML = `
-          <h2>Weather in ${weatherData.name}</h2>
-          <p>Temperature: ${temperature}°C</p>
-          <p>Description: ${description}</p>
-          <img src="${iconUrl}" alt="Weather icon">
-        `;
-      }
-    </script>
+    <script src="./weather-script.js"></script>
   </body>
 </html>
