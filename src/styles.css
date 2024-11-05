@@ -1,0 +1,58 @@
+@font-face {
+  font-family: "Onest";
+  src: url("./assets/fonts/Onest.ttf") format("truetype");
+}
+
+html,
+body {
+  background-color: #101010;
+
+  font-family: "Onest", serif;
+  font-optical-sizing: auto;
+  font-size: 15px;
+  color: #ffffff;
+
+  display: flex;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 48px;
+}
+
+.search-engine {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+button {
+  font-family: "Onest", serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #ffffff;
+
+  padding: 20px 40px;
+
+  background-color: #4c47eb;
+  border: none;
+  border-radius: 10px;
+
+  cursor: pointer;
+}
+
+.city-input input {
+  font-family: "Onest", serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #ffffff;
+
+  padding: 20px 40px;
+  background-color: #161616;
+  border: none;
+  border-radius: 10px;
+}
+
+.main-page {
+  margin-top: 10%;
+}
