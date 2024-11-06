@@ -75,6 +75,99 @@ function cacheWeather(cityName, data) {
   localStorage.setItem(`weather_${cityName}`, JSON.stringify(cacheItem));
 }
 
+function updateFractal(temperature, humidity, windSpeed, pressure) {
+  const fractalBox = document.getElementById("fractalBox");
+
+  const fractalBoxSize = fractalBox.getBoundingClientRect();
+  const fractalWidth = fractalBoxSize.width;
+  const fractalHeight = fractalBoxSize.height;
+
+  new p5((p) => {
+    let angle = 0;
+    let fractalSize = 15;
+    let lineDensity = 100;
+    let speedFactor = 0.003;
+    let fractalForm = 1;
+    let breathingOffset = 0;
+    let breathingSpeed = 0.01;
+    const maxBreathingOffset = Math.min(fractalWidth, fractalHeight) / 4; 
+
+    p.setup = () => {
+      p.createCanvas(fractalWidth, fractalHeight).parent(fractalBox);
+      p.frameRate(165);
+    };
+
+    p.temperatureToColor = (temp) => {
+      const minTemp = -90;
+      const maxTemp = 57;
+      const scale = (temp - minTemp) / (maxTemp - minTemp);
+      const clampedScale = Math.min(Math.max(scale, 0), 1);
+      const red = Math.floor(clampedScale * 255);
+      const blue = Math.floor((1 - clampedScale) * 255);
+      return p.color(red, 0, blue);
+    };
+
+    p.humidityToLineDensity = (humidity) => {
+      return Math.floor((humidity / 100) * 500);
+    };
+
+    p.drawFractal = (x, y, size, angle, density, form) => {
+      p.push();
+      p.translate(x, y);
+      p.rotate(angle);
+      p.beginShape();
+
+      for (let i = 0; i < density; i++) {
+        const rad = p.radians(i * form);
+        const r =
+          size *
+          (1 +
+            0.7 * p.sin(8 * rad + temperature / 5) +
+            0.4 * p.cos(5 * rad + humidity / 50) +
+            0.6 * p.sin(7 * rad + pressure / 300) +
+            0.3 * p.cos(3 * rad + windSpeed / 5) +
+            p.random(-0.3, 0.3));
+
+        const x1 = r * p.cos(rad);
+        const y1 = r * p.sin(rad);
+        p.vertex(x1, y1);
+      }
+
+      p.endShape(p.CLOSE);
+      p.pop();
+    };
+
+    p.draw = () => {
+      p.clear();
+      const fractalColor = p.temperatureToColor(temperature);
+      p.stroke(fractalColor);
+      p.noFill();
+
+      breathingOffset = Math.sin(p.frameCount * breathingSpeed) * maxBreathingOffset - 50;
+
+      lineDensity = p.humidityToLineDensity(humidity);
+      angle += windSpeed * speedFactor;
+
+      fractalForm =
+        1 +
+        pressure / 1000 +
+        humidity / 200 +
+        temperature / 50 +
+        p.random(0, 0.5);
+
+      p.drawFractal(
+        fractalWidth / 2,
+        fractalHeight / 2,
+        fractalSize + breathingOffset,
+        angle,
+        lineDensity,
+        fractalForm
+      );
+    };
+  });
+}
+
+
 function displayWeather(weatherData) {
   const temperature = weatherData.main.temp;
   const description = weatherData.weather[0].description;
@@ -88,7 +181,7 @@ function displayWeather(weatherData) {
 
   weatherDisplay.innerHTML = `
     <div class="weather-box fractalBox" id="fractalBox"></div>
-    <div class="weather-box">
+    <div class="weather-box" id="weatherBox">
       <p class="weather-box-big">Сегодня</p>
       <p>${minTemp}°C...${maxTemp}°C — ${description}, осадки ${rain}мм — ветер ${windSpeed} м/с</p>
     </div>
@@ -108,6 +201,8 @@ function displayWeather(weatherData) {
       <p>Давление <p class="weather-box-big">${pressure} гПа</p></p>
     </div>
   `;
+
+  updateFractal(temperature, humidity, windSpeed, pressure);
 }
 
 weatherButton.addEventListener("click", getWeather);
