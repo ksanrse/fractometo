@@ -86,11 +86,9 @@ function updateFractal(temperature, humidity, windSpeed, pressure) {
     let angle = 0;
     let fractalSize = 15;
     let lineDensity = 100;
-    let speedFactor = 0.003;
+    let speedFactor = 0.001;
     let fractalForm = 1;
-    let breathingOffset = 0;
-    let breathingSpeed = 0.01;
-    const maxBreathingOffset = Math.min(fractalWidth, fractalHeight) / 4; 
+    let breathingSpeed = 0.002;
 
     p.setup = () => {
       p.createCanvas(fractalWidth, fractalHeight).parent(fractalBox);
@@ -140,10 +138,15 @@ function updateFractal(temperature, humidity, windSpeed, pressure) {
     p.draw = () => {
       p.clear();
       const fractalColor = p.temperatureToColor(temperature);
-      p.stroke(fractalColor);
+      const alphaValue =
+        Math.abs(Math.sin(p.frameCount * breathingSpeed)) * 255; // Затухание цвета от центра наружу
+      p.stroke(
+        fractalColor.levels[0],
+        fractalColor.levels[1],
+        fractalColor.levels[2],
+        alphaValue
+      );
       p.noFill();
-
-      breathingOffset = Math.sin(p.frameCount * breathingSpeed) * maxBreathingOffset - 50;
 
       lineDensity = p.humidityToLineDensity(humidity);
       angle += windSpeed * speedFactor;
@@ -158,15 +161,15 @@ function updateFractal(temperature, humidity, windSpeed, pressure) {
       p.drawFractal(
         fractalWidth / 2,
         fractalHeight / 2,
-        fractalSize + breathingOffset,
+        fractalSize,
         angle,
         lineDensity,
-        fractalForm
+        fractalForm,
+        alphaValue
       );
     };
   });
 }
-
 
 function displayWeather(weatherData) {
   const temperature = weatherData.main.temp;
