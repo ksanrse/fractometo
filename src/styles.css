@@ -12,6 +12,13 @@ body {
   color: #ffffff;
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+}
+
+body {
+  margin: 0 20px;
 }
 
 h1 {
@@ -25,7 +32,7 @@ h1 {
   justify-content: center;
   flex-wrap: wrap;
   align-items: center;
-  padding: 0 20px;
+  padding: 0;
 }
 
 .search-button {
@@ -70,11 +77,38 @@ h1 {
 }
 
 .main-page {
-  margin-top: 14vh;
+  margin-top: 10vh;
 }
 
 .weather-info {
-  margin-top: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 100px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.weather-box {
+  background-color: #161616;
+  padding: 20px 40px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  color: #fff;
+  flex-grow: 1;
+}
+
+.weather-box p {
+  margin: 0;
+}
+
+.weather-box-big {
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .suggestions-list {
@@ -100,4 +134,16 @@ h1 {
 
 .suggestions-list li:hover {
   color: #4c47eb;
+}
+
+.hero-section {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.fractalBox {
+  max-width: 90px;
+  width: 90px;
+  padding: 0;
 }

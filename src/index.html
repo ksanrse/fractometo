@@ -9,13 +9,21 @@
   </head>
   <body>
     <div class="main-page">
-      <h1>Узнать фракто-погоду</h1>
-      <div class="search-container">
-        <div class="city-input-wrapper">
-          <input id="cityInput" autocomplete="off" placeholder="Мой город..." />
-          <ul id="suggestionsBox" class="suggestions-list"></ul>
+      <div class="hero-section">
+        <h1>Узнать фракто-погоду</h1>
+        <div class="search-container">
+          <div class="city-input-wrapper">
+            <input
+              id="cityInput"
+              autocomplete="off"
+              placeholder="Мой город..."
+            />
+            <ul id="suggestionsBox" class="suggestions-list"></ul>
+          </div>
+          <button id="weatherButton" class="search-button">
+            Узнать прогноз
+          </button>
         </div>
-        <button id="weatherButton" class="search-button">Узнать прогноз</button>
       </div>
       <div id="weatherDisplay" class="weather-info"></div>
     </div>
