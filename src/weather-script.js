@@ -26,10 +26,6 @@ fetch("./cities.json")
 
 async function getWeather() {
   const cityName = cityInput.value.trim();
-  if (cityName === "") {
-    alert("Введите имя города");
-    return;
-  }
 
   const cachedData = getCachedWeather(cityName);
   if (cachedData) {
@@ -51,8 +47,8 @@ async function getWeather() {
       throw new Error(`Ошибка ${response.status}: ${response.statusText}`);
     }
   } catch (error) {
-    console.error("Ошибка:", error);
-    weatherDisplay.innerText = `Ошибка: ${error.message}`;
+    console.error(error);
+    weatherDisplay.innerText = error.message;
   }
 }
 
@@ -116,12 +112,6 @@ function displayWeather(weatherData) {
 
 weatherButton.addEventListener("click", getWeather);
 
-cityInput.addEventListener("keydown", function (event) {
-  if (event.key === "Enter") {
-    getWeather();
-  }
-});
-
 cityInput.addEventListener("input", showCitySuggestions);
 cityInput.addEventListener("focus", showCitySuggestions);
 
@@ -132,7 +122,7 @@ function showCitySuggestions() {
     city.name.toLowerCase().startsWith(inputValue)
   );
 
-  displaySuggestions(filteredCities.slice(0, 10));
+  displaySuggestions(filteredCities.slice(0, 5));
 }
 
 function displaySuggestions(suggestions) {
@@ -164,5 +154,93 @@ document.addEventListener("click", (event) => {
     !suggestionsBox.contains(event.target)
   ) {
     suggestionsBox.style.display = "none";
+  }
+});
+
+let currentIndex = -1;
+
+function showCitySuggestions() {
+  const inputValue = cityInput.value.toLowerCase();
+
+  const filteredCities = cities.filter((city) =>
+    city.name.toLowerCase().startsWith(inputValue)
+  );
+
+  displaySuggestions(filteredCities.slice(0, 5));
+}
+
+function displaySuggestions(suggestions) {
+  suggestionsBox.innerHTML = "";
+  currentIndex = -1;
+
+  suggestions.forEach((city, index) => {
+    const suggestionItem = document.createElement("li");
+    suggestionItem.textContent = city.name;
+    suggestionItem.addEventListener("click", () => {
+      selectCity(city.name);
+    });
+    suggestionsBox.appendChild(suggestionItem);
+  });
+
+  suggestionsBox.style.display = suggestions.length > 0 ? "block" : "none";
+}
+
+function selectCity(cityName) {
+  cityInput.value = cityName;
+  suggestionsBox.style.display = "none";
+}
+
+cityInput.addEventListener("keydown", (event) => {
+  const suggestions = suggestionsBox.querySelectorAll("li");
+
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    if (currentIndex < suggestions.length - 1) {
+      currentIndex++;
+      highlightSuggestion(suggestions, currentIndex);
+    }
+  } else if (event.key === "ArrowUp") {
+    event.preventDefault();
+    if (currentIndex > 0) {
+      currentIndex--;
+      highlightSuggestion(suggestions, currentIndex);
+    }
+  } else if (event.key === "Enter") {
+    event.preventDefault();
+    if (currentIndex >= 0 && suggestions[currentIndex]) {
+      selectCity(suggestions[currentIndex].textContent);
+    } else {
+      getWeather();
+    }
+  }
+});
+
+function highlightSuggestion(suggestions, index) {
+  suggestions.forEach((item) => {
+    item.style.backgroundColor = "transparent";
+    item.style.color = "#fff";
+  });
+
+  suggestions[index].style.backgroundColor = "#4c47eb";
+  suggestions[index].style.color = "#fff";
+}
+
+document.addEventListener("click", (event) => {
+  if (
+    !cityInput.contains(event.target) &&
+    !suggestionsBox.contains(event.target)
+  ) {
+    suggestionsBox.style.display = "none";
+  }
+});
+
+cityInput.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    const cityName = cityInput.value.trim();
+    if (cityName === "") {
+      return;
+    } else {
+      getWeather(cityName);
+    }
   }
 });
