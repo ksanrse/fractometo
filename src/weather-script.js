@@ -83,6 +83,14 @@ function displayWeather(weatherData) {
   `;
 }
 
+weatherButton.addEventListener("click", getWeather);
+
+cityInput.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    getWeather();
+  }
+});
+
 cityInput.addEventListener("input", showCitySuggestions);
 cityInput.addEventListener("focus", showCitySuggestions);
 
