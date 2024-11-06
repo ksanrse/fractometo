@@ -1,4 +1,6 @@
-const apiKey = "6c4e0912b8154924f395d5afbcf59fb5";
+const apiKey = CONFIG.API_KEY;
+const CACHE_EXPIRATION_TIME = 30 * 60 * 1000;
+
 const weatherButton = document.getElementById("weatherButton");
 const cityInput = document.getElementById("cityInput");
 const weatherDisplay = document.getElementById("weatherDisplay");
@@ -29,6 +31,12 @@ async function getWeather() {
     return;
   }
 
+  const cachedData = getCachedWeather(cityName);
+  if (cachedData) {
+    displayWeather(cachedData);
+    return;
+  }
+
   const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
     cityName
   )}&appid=${apiKey}&units=metric&lang=ru`;
@@ -38,6 +46,7 @@ async function getWeather() {
     if (response.ok) {
       const data = await response.json();
       displayWeather(data);
+      cacheWeather(cityName, data);
     } else {
       throw new Error(`Ошибка ${response.status}: ${response.statusText}`);
     }
@@ -45,6 +54,29 @@ async function getWeather() {
     console.error("Ошибка:", error);
     weatherDisplay.innerText = `Ошибка: ${error.message}`;
   }
+}
+
+function getCachedWeather(cityName) {
+  const cachedItem = localStorage.getItem(`weather_${cityName}`);
+  if (!cachedItem) return null;
+
+  const cachedData = JSON.parse(cachedItem);
+  const currentTime = new Date().getTime();
+
+  if (currentTime - cachedData.timestamp < CACHE_EXPIRATION_TIME) {
+    return cachedData.data;
+  } else {
+    localStorage.removeItem(`weather_${cityName}`);
+    return null;
+  }
+}
+
+function cacheWeather(cityName, data) {
+  const cacheItem = {
+    data: data,
+    timestamp: new Date().getTime(),
+  };
+  localStorage.setItem(`weather_${cityName}`, JSON.stringify(cacheItem));
 }
 
 function displayWeather(weatherData) {
@@ -59,10 +91,9 @@ function displayWeather(weatherData) {
   const rain = weatherData.rain ? weatherData.rain["1h"] : 0;
 
   weatherDisplay.innerHTML = `
-    <div class="weather-box fractalBox" id="fractalBox">
-    </div>
+    <div class="weather-box fractalBox" id="fractalBox"></div>
     <div class="weather-box">
-    <p class="weather-box-big">Сегодня</p>
+      <p class="weather-box-big">Сегодня</p>
       <p>${minTemp}°C...${maxTemp}°C — ${description}, осадки ${rain}мм — ветер ${windSpeed} м/с</p>
     </div>
     <div class="weather-box">
@@ -120,8 +151,6 @@ function displaySuggestions(suggestions) {
 
   suggestionsBox.style.display = suggestions.length > 0 ? "block" : "none";
 }
-
-weatherButton.addEventListener("click", getWeather);
 
 cityInput.addEventListener("input", () => {
   if (cityInput.value.trim() === "") {

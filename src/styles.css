@@ -11,7 +11,7 @@ body {
   font-size: 15px;
   color: #ffffff;
   display: flex;
-  justify-content: center;
+
   flex-direction: column;
   align-items: center;
   height: 100vh;
@@ -137,8 +137,8 @@ h1 {
 }
 
 .hero-section {
-  max-width: 600px;
-  width: 100%;
+  width: fit-content;
+  max-width: fit-content;
   margin: 0 auto;
 }
 
